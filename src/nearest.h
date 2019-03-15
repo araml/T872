@@ -7,7 +7,9 @@
 extern "C" {
 #endif
 
-char* nearest(char *src, size_t width, size_t height);
+typedef unsigned char uchar;
+
+uchar* nearest(uchar *src, size_t width, size_t height);
 
 #ifdef __cplusplus
 }

@@ -4,7 +4,7 @@ project(shmup)
 enable_testing()
 
 set(CMAKE_CXX_FLAGS "-std=c++2a -ggdb")
-set(CMAKE_C_FLAGS "-std=c99")
+set(CMAKE_C_FLAGS "-std=c99 -ggdb")
 option(BUILD_DEMOSAICER "Build the application mandated task")
 option(BUILD_TESTS "Build a suite of tests")
 
