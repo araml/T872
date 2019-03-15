@@ -1,4 +1,5 @@
 #include <nearest.h>
+#include <assert.h>
 
 int main() {
     // We want to copy the nearest neighbour value in this 4x4 matrix
@@ -16,4 +17,7 @@ int main() {
                     5, 5, 7, 7};
 
 
+    for (int i = 0; i < sizeof(r); i++) {
+        assert(r[i] == result[i]);
+    }
 }
