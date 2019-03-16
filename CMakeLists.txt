@@ -27,7 +27,7 @@ endif()
 #    include_directories(src/${name})
 #endmacro()
 
-set(src_files src/nearest.c)
+set(src_files src/nearest.c src/utilities.c)
 set(demosaicer src/main.cpp)
 include_directories(src)
 
@@ -49,4 +49,5 @@ if (BUILD_TESTS)
     endmacro()
 
     add_custom_test(tests/test_nearest_neighbour.cpp ${src_files})
+    add_custom_test(tests/test_split_raw12.cpp ${src_files})
 endif()
