@@ -5,6 +5,7 @@
 extern "C" {
 #endif
 
+#include <stdint.h>
 #include <stddef.h>
 
 typedef unsigned char uchar;
@@ -23,8 +24,6 @@ typedef enum cfa_pattern {
 } cfa_pattern;
 
 rgb split_raw12(uchar *raw12, size_t width, size_t height, cfa_pattern pattern);
-
-
 
 #ifdef __cplusplus
 }
