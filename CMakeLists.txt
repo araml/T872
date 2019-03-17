@@ -35,7 +35,7 @@ if (BUILD_DEMOSAICER)
     add_executable(T872 ${demosaicer} ${src_files})
 
     if(CLANG_TIDY_EXE)
-      set_target_properties(shmup PROPERTIES
+      set_target_properties(T872 PROPERTIES
                             CXX_CLANG_TIDY "${DO_CLANG_TIDY}")
     endif()
 endif()

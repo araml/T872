@@ -10,11 +10,12 @@ extern "C" {
 
 typedef unsigned char uchar;
 
-typedef struct rgb {
+typedef struct bayer_array {
     uchar *r;
-    uchar *g;
+    uchar *g1;
+    uchar *g2;
     uchar *b;
-} rgb;
+} bayer_array;
 
 typedef enum cfa_pattern {
     RGGB,  // raw12 pattern
@@ -23,8 +24,8 @@ typedef enum cfa_pattern {
     RGBG,
 } cfa_pattern;
 
-rgb split_raw12(uchar *raw12, size_t width, size_t height, cfa_pattern pattern);
-
+bayer_array split_raw12(uchar *raw12, size_t width, size_t height, cfa_pattern pattern);
+uchar *load_raw12(const char *path);
 #ifdef __cplusplus
 }
 #endif
