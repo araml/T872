@@ -87,7 +87,7 @@ void write_ppm(const char *path, uchar *buffer, size_t width, size_t height,
     // We asume gray is a single channel 0-255 pix map
     if (type == GRAY) {
         uchar header[50];
-        sprintf((char *)header, "P1\n%zu %zu\n", width, height);
+        sprintf((char *)header, "P5\n%zu %zu 255\n", width, height);
         printf("Header:\n%ssize: %lu\n", header, strlen((const char *)header));
         write(fd, header, strlen((const char *)header));
 
