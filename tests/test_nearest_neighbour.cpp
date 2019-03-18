@@ -28,4 +28,15 @@ int main() {
     for (int i = 0; i < sizeof(r); i++) {
         assert(r[i] == result[i]);
     }
+
+    uchar *single_row = nearest_single_row(i, 2, 2);
+
+    uchar s[8] = {3, 3, 6, 6,
+                  5, 5, 7, 7};
+
+    for (int i = 0; i < sizeof(s); i++) {
+        assert(s[i] == single_row[i]);
+    }
+
+
 }

@@ -25,5 +25,17 @@ uchar* nearest(uchar *cfa_s, size_t width, size_t height) {
 }
 
 uchar* nearest_single_row(uchar *cfa_s, size_t width, size_t height) {
+    uchar *deb_s = (uchar *)malloc(width * height * 2); //, sizeof(char));
 
+    uchar (*deb)[width * 2] = (uchar (*)[width * 2])deb_s;
+    uchar (*cfa)[width] = (uchar (*)[width])cfa_s;
+
+    for (size_t k = 0; k < height; k++) {
+        for (size_t i = 0; i < width; i++) {
+            deb[k][2 * i]         = cfa[k][i];
+            deb[k][(2 * i) + 1]   = cfa[k][i]; // [ v  | ..] we expand to the right
+        }
+    }
+
+    return deb_s;
 }

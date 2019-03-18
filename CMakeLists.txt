@@ -3,13 +3,13 @@ cmake_minimum_required(VERSION 3.0)
 project(shmup)
 enable_testing()
 
-set(CMAKE_CXX_FLAGS "-std=c++2a -ggdb")
+set(CMAKE_CXX_FLAGS "-std=c++1z -ggdb")
 set(CMAKE_C_FLAGS "-std=c99 -ggdb")
 option(BUILD_DEMOSAICER "Build the application mandated task")
 option(BUILD_TESTS "Build a suite of tests")
 
-SET(CMAKE_C_COMPILER /usr/bin/clang)
-SET(CMAKE_CXX_COMPILER /usr/bin/clang++)
+#SET(CMAKE_C_COMPILER /usr/bin/clang)
+#SET(CMAKE_CXX_COMPILER /usr/bin/clang++)
 
 
 find_program(CLANG_TIDY_EXE
@@ -34,10 +34,10 @@ include_directories(src)
 if (BUILD_DEMOSAICER)
     add_executable(T872 ${demosaicer} ${src_files})
 
-    if(CLANG_TIDY_EXE)
-      set_target_properties(T872 PROPERTIES
-                            CXX_CLANG_TIDY "${DO_CLANG_TIDY}")
-    endif()
+#    if(CLANG_TIDY_EXE)
+#      set_target_properties(T872 PROPERTIES
+#                            CXX_CLANG_TIDY "${DO_CLANG_TIDY}")
+#    endif()
 endif()
 
 if (BUILD_TESTS)

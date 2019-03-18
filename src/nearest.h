@@ -10,6 +10,7 @@ extern "C" {
 typedef unsigned char uchar;
 
 uchar* nearest(uchar *src, size_t width, size_t height);
+uchar* nearest_single_row(uchar *cfa_s, size_t width, size_t height);
 
 #ifdef __cplusplus
 }

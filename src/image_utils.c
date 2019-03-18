@@ -86,28 +86,32 @@ void write_ppm(const char *path, uchar *buffer, size_t width, size_t height,
 
 
     // We asume gray is a single channel 0-255 pix map
+    uchar header[50];
     if (type == GRAY) {
-        uchar header[50];
         sprintf((char *)header, "P5\n%zu %zu 255\n", width, height);
-        printf("Header:\n%ssize: %lu\n", header, strlen((const char *)header));
-        write(fd, header, strlen((const char *)header));
+    } else if (type == RGB) {
+        sprintf((char *)header, "P6\n%zu %zu 255\n", width, height);
+    }
 
-        ssize_t write_bytes;
-        size_t buf_size = width * height;
+    // Write header
+    write(fd, header, strlen((const char *)header));
 
-        while (buf_size && (write_bytes = write(fd, buffer, buf_size)) != 0) {
-            if (write_bytes == -1) {
-                if (errno == EINTR || errno == EAGAIN)
-                    continue;
-                else {
-                    perror("Error while writing ppm");
-                    abort();
-                }
+    // Write the image as binary
+    ssize_t write_bytes;
+    size_t buf_size = width * height * 3;
+
+    while (buf_size && (write_bytes = write(fd, buffer, buf_size)) != 0) {
+        if (write_bytes == -1) {
+            if (errno == EINTR || errno == EAGAIN)
+                continue;
+            else {
+                perror("Error while writing ppm");
+                abort();
             }
-
-            buffer += write_bytes;
-            buf_size -= write_bytes;
         }
+
+        buffer += write_bytes;
+        buf_size -= write_bytes;
     }
 
     close(fd);
