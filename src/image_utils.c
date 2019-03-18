@@ -6,7 +6,8 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include <utilities.h>
+#include <string.h>
+#include <image_utils.h>
 
 bayer_array split_raw12(uchar *raw12_src, size_t width, size_t height,
                 cfa_pattern pattern) {
@@ -41,30 +42,72 @@ bayer_array split_raw12(uchar *raw12_src, size_t width, size_t height,
 
 uchar *load_raw12(const char *path) {
     int fp = open(path, O_RDONLY);
+    if (fp < 0) {
+        perror("Error while opening file to read");
+        abort();
+    }
+
     // 4096 * 12bits / 8 ~ bytes in a row
     const int row_size = (4096 * 12) / 8;
     const int col_size = 3072;
-    const int buffer_size = col_size * row_size;
+    int buffer_size = col_size * row_size;
     uchar *buffer = malloc(buffer_size);
     uchar *image_buffer = buffer;
 
     ssize_t read_bytes = 0;
     // Only image data, we forget about the extra appended register data
-    size_t len = col_size * row_size;
-    while (len != 0 && (read_bytes = read(fp, buffer, buffer_size)) != 0) {
+    while (buffer_size != 0 && (read_bytes = read(fp, buffer, buffer_size)) != 0) {
         if (read_bytes == -1) {
             if (errno == EINTR || errno == EAGAIN)
                 continue;
             else {
                 // More serious error
                 perror ("Error while loading image");
-                break;
+                abort();
             }
         }
 
-        len    -= read_bytes;
-        buffer += read_bytes;
+        buffer      += read_bytes;
+        buffer_size -= read_bytes;
     }
 
     return image_buffer;
+}
+
+
+void write_ppm(const char *path, uchar *buffer, size_t width, size_t height,
+               image_type type) {
+    int fd = open(path, O_CREAT | O_WRONLY);
+    if (fd < 0) {
+        perror("Error opening file to write");
+        abort();
+    }
+
+
+    // We asume gray is a single channel 0-255 pix map
+    if (type == GRAY) {
+        uchar header[50];
+        sprintf((char *)header, "P1\n%zu %zu\n", width, height);
+        printf("Header:\n%ssize: %lu\n", header, strlen((const char *)header));
+        write(fd, header, strlen((const char *)header));
+
+        ssize_t write_bytes;
+        size_t buf_size = width * height;
+
+        while (buf_size && (write_bytes = write(fd, buffer, buf_size)) != 0) {
+            if (write_bytes == -1) {
+                if (errno == EINTR || errno == EAGAIN)
+                    continue;
+                else {
+                    perror("Error while writing ppm");
+                    abort();
+                }
+            }
+
+            buffer += write_bytes;
+            buf_size -= write_bytes;
+        }
+    }
+
+    close(fd);
 }

@@ -27,7 +27,7 @@ endif()
 #    include_directories(src/${name})
 #endmacro()
 
-set(src_files src/nearest.c src/utilities.c)
+set(src_files src/nearest.c src/image_utils.c)
 set(demosaicer src/main.cpp)
 include_directories(src)
 
