@@ -23,14 +23,14 @@ bayer_array split_raw12(uchar *raw12_src, size_t width, size_t height,
     for (int k = 0; k < height; k++) {
         if (!(k % 2)) {
             for (int i = 0; i < buffer_width; i += 3) {
-                red[ridx] = (raw12[k][i] << 4) | (raw12[k][i + 1] >> 4);
-                green1[ridx] = ((raw12[k][i + 1] & 0x0F) << 8) | raw12[k][i + 2];
+                red[ridx] = ((raw12[k][i] << 4) | (raw12[k][i + 1] >> 4)) >> 4;
+                green1[ridx] = (((raw12[k][i + 1] & 0x0F) << 8) | raw12[k][i + 2]) >> 4;
                 ridx++;
             }
         } else {
             for (int i = 0; i < buffer_width; i += 3) {
-                green2[bidx] = (raw12[k][i] << 4) | (raw12[k][i + 1] >> 4);
-                blue[bidx] = ((raw12[k][i + 1] & 0x0F) << 8) | raw12[k][i + 2];
+                green2[bidx] = ((raw12[k][i] << 4) | (raw12[k][i + 1] >> 4)) >> 4;
+                blue[bidx] = (((raw12[k][i + 1] & 0x0F) << 8) | raw12[k][i + 2]) >> 4;
                 bidx++;
             }
         }
@@ -78,7 +78,7 @@ uchar *load_raw12(const char *path) {
 
 void write_ppm(const char *path, uchar *buffer, size_t width, size_t height,
                image_type type) {
-    int fd = open(path, O_CREAT | O_WRONLY);
+    int fd = open(path, O_CREAT | O_WRONLY, S_IRWXU | S_IRWXG | S_IRWXO);
     if (fd < 0) {
         perror("Error opening file to write");
         abort();
