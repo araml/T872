@@ -36,6 +36,7 @@ bayer_array split_raw12(uchar *raw12_src, size_t width, size_t height,
         }
     }
 
+    printf("ridx: %d bidx: %d\n", ridx, bidx);
     bayer_array res = {red, green1, green2, blue};
     return res;
 }
